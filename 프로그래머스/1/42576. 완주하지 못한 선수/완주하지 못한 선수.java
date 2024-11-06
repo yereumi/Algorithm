@@ -3,7 +3,6 @@ import java.util.*;
 class Solution {
     public String solution(String[] participant, String[] completion) {
         Map<String, Integer> participantList = new HashMap<String, Integer>();
-        List<String> completionList = new ArrayList<>();
         
         String answer = "";
         for (String person : participant) {
