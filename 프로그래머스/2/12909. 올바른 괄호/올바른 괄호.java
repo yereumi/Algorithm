@@ -3,8 +3,7 @@ import java.util.*;
 class Solution {
     boolean solution(String s) {
         Stack<String> stack = new Stack<>();
-        stack.push(Character.toString(s.charAt(0)));
-        for (int i = 1; i < s.length(); i++) {
+        for (int i = 0; i < s.length(); i++) {
         	String str = Character.toString(s.charAt(i));
         	if (str.equals("(")) {
         		stack.push(str);
