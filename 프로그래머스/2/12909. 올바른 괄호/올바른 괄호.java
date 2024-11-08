@@ -10,8 +10,7 @@ class Solution {
         	} else if (str.equals(")")) {
         		if (!stack.isEmpty() && stack.peek().equals("(")) {
         			stack.pop();
-        		}
-        		else return false;
+        		} else return false;
         	}
         }
         if (stack.isEmpty())
