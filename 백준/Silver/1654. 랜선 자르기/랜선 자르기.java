@@ -3,6 +3,12 @@ import java.io.*;
 
 public class Main {
 	
+	/**
+	 * 특정 퍼센트에서 계속 틀릴 경우
+	 * 1. Overflow
+	 * 2. 자료형 선택 미스 
+	 */
+	
 	public static int k, n;
 	public static int[] array;
 	
