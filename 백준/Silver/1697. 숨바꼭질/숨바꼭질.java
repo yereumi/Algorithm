@@ -17,12 +17,12 @@ public class Main {
 		k = Integer.parseInt(st.nextToken());
 		int answer = 0;
 		Deque<int[]> dq = new ArrayDeque<>();
-		boolean[] visited = new boolean[1000000];
+		boolean[] visited = new boolean[100_001];
 		dq.offer(new int[] { n, 0 });
 		visited[n] = true;;
 
 		while (!dq.isEmpty()) {
-			int[] sb = dq.poll();
+			int[] sb = dq.poll(); // sb -> cur
 			if (sb[0] == k) {
 				answer = sb[1];
 				break;
@@ -34,7 +34,8 @@ public class Main {
 				} else {
 					nx = sb[0] + dx[i];
 				}
-				if (isValid(nx) && !visited[nx]) { // 시간초과 contains 때문...? 방문처리 우야
+				if (isValid(nx) && !visited[nx]) { 
+					// ArrayList의 contains 사용하면 O(n) -> 시간초과
 					dq.offer(new int[] { nx, sb[1] + 1 });
 					visited[nx] = true;
 				}
