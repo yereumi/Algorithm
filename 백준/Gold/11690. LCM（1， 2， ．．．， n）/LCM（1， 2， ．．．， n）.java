@@ -17,7 +17,6 @@ public class Main {
 			}
 		}
 		long lcm = 1;
-		long cnt = 0;
 		for (int prime : primes) {
 			long power = prime;
 			while (power * prime <= n) {
