@@ -1,4 +1,3 @@
-import java.util.*;
 import java.io.*;
 
 public class Main {
@@ -21,7 +20,6 @@ public class Main {
 			gcd(distance[i], distance[i + 1]);
 		}
 		int gcd = findGcd(0);
-//		System.out.println(gcd);
 		System.out.println((tree[n - 1] - tree[0]) / gcd + 1 - n);
 
 	}
