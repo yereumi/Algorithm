@@ -17,6 +17,11 @@ public class Main {
 		sb.append("\n");
 	}
 	
+	public static boolean isShortcut(char c) {
+		return !shortcut.contains(Character.toString(Character.toUpperCase(c))) 
+				&& !shortcut.contains(Character.toString(Character.toLowerCase(c)));
+	}
+	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
@@ -27,7 +32,7 @@ public class Main {
 			int idx = 0;
 			flag = false;
 			for (int i = 0; i < array.length; i++) {
-				if (!shortcut.contains(Character.toString(Character.toUpperCase(array[i].charAt(0)))) && !shortcut.contains(Character.toString(Character.toLowerCase(array[i].charAt(0))))) {
+				if (isShortcut(array[i].charAt(0))) {
 					shortcut.add(Character.toString(array[i].charAt(0)));
 					flag = true;
 					break;
@@ -37,7 +42,7 @@ public class Main {
 			for (int i = 0; i < str.length(); i++) {
 				if (flag) break;
 				Character c = str.charAt(i);
-				if (c != ' ' && !shortcut.contains(Character.toString(Character.toUpperCase(c))) && !shortcut.contains(Character.toString(Character.toLowerCase(c)))) {
+				if (c != ' ' && isShortcut(c)) {
 					shortcut.add(Character.toString(str.charAt(i)));
 					idx = i;
 					break;
