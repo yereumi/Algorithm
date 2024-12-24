@@ -15,7 +15,7 @@ public class Main {
 			return true;
 		return false;
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -47,7 +47,7 @@ public class Main {
 			System.out.println(0);
 			System.exit(0);
 		}
-		
+
 		while (!addedTomato.isEmpty()) {
 			tomatoList = new ArrayDeque<>(addedTomato);
 			addedTomato.clear();
@@ -57,20 +57,25 @@ public class Main {
 				int z = newTomato[0];
 				int y = newTomato[1];
 				int x = newTomato[2];
-				
+
 				for (int i = 0; i < 6; i++) {
-					if (tomato[z][y][x] == 1 && isValid(z + dz[i], y + dy[i], x + dx[i])) {
-						if (tomato[z + dz[i]][y + dy[i]][x + dx[i]] == 0) {
-							tomato[z + dz[i]][y + dy[i]][x + dx[i]] = 1;
-							addedTomato.offer(new int[] {z + dz[i], y + dy[i], x + dx[i] });
+					int nextZ = z + dz[i];
+					int nextY = y + dy[i];
+					int nextX = x + dx[i];
+					if (tomato[z][y][x] == 1 && isValid(nextZ, nextY, nextX)) {
+						if (tomato[nextZ][nextY][nextX] == 0) {
+							tomato[nextZ][nextY][nextX] = 1;
+							addedTomato.offer(new int[] { nextZ, nextY, nextX });
 							flag = true;
-						};
+						}
+						;
 					}
 				}
 			}
-			if (flag) cnt++;
+			if (flag)
+				cnt++;
 		}
-		
+
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < n; j++) {
 				for (int k = 0; k < m; k++) {
