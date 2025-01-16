@@ -47,8 +47,8 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			int v1 = Integer.parseInt(st.nextToken());
 			int v2 = Integer.parseInt(st.nextToken());
-			int cost = Integer.parseInt(st.nextToken());
-			graph.get(v1).add(new int[] { v1, v2, cost });
+			int d = Integer.parseInt(st.nextToken());
+			graph.get(v1).add(new int[] { v1, v2, d });
 		}
 		st = new StringTokenizer(br.readLine());
 		start = Integer.parseInt(st.nextToken());
