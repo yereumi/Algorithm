@@ -41,7 +41,7 @@ public class Main {
 				docCnt++;
 				building[y][x] = '.';
 				dq.offer(new int[] { y, x });
-			} else { // 길일 경우
+			} else { // 빈 공간일 경우
 				dq.offer(new int[] { y, x });
 				visited[y][x] = true;
 			}
@@ -72,10 +72,10 @@ public class Main {
 									}
 								}
 							}
-						} else if (building[ny][nx] == '.') {
+						} else if (building[ny][nx] == '.') { // 문서일 경우
 							dq.offer(new int[] { ny, nx });
 							visited[ny][nx] = true;
-						} else if (building[ny][nx] == '$') {
+						} else if (building[ny][nx] == '$') { // 빈 공간일 경우
 							building[ny][nx] = '.';
 							docCnt++;
 							dq.offer(new int[] { ny, nx });
@@ -118,7 +118,7 @@ public class Main {
 					key.add(Character.toUpperCase(k)); // 열쇠 대문자로 저장
 			}
 			
-			while (true) {
+			while (true) { // 새로운 열쇠가 추가되지 않을 때까지
 				int keyCnt = key.size();
 				bfs();
 				if (keyCnt == key.size()) break;
