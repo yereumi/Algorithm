@@ -28,7 +28,6 @@ public class Main {
 				else r--;
 			}
 		}
-		
 		System.out.println(answer[0] + " " + answer[1] + " " + answer[2]);
 	}
 }
