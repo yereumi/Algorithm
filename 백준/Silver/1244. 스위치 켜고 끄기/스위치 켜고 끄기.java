@@ -6,13 +6,13 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
-		int n = Integer.parseInt(br.readLine());
+		int n = Integer.parseInt(br.readLine()); // 스위치수
 		int[] arr = new int[n];
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
-		int s = Integer.parseInt(br.readLine());
+		int s = Integer.parseInt(br.readLine()); // 학생수
 		int[][] std = new int[n][2];
 		for (int i = 0; i < s; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -20,8 +20,8 @@ public class Main {
 			std[i][1] = Integer.parseInt(st.nextToken());
 		}
 		for (int i = 0; i < s; i++) {
-			int gen = std[i][0];
-			int num = std[i][1];
+			int gen = std[i][0]; // 성별
+			int num = std[i][1]; // 숫자
 			if (gen == 1) { // 남학생일 때
 				for (int j = 0; j < n; j++) {
 					if ((j + 1) % num == 0) { // 숫자의 배수일 때
@@ -30,7 +30,7 @@ public class Main {
 					}
 				}
 			} else { // 여학생일 때
-				int l = num - 2, r = num;
+				int l = num - 2, r = num; // 숫자의 왼쪽과 오른쪽 인덱스
 				if (arr[num - 1] == 0) arr[num - 1] = 1;
 				else arr[num - 1] = 0;
 				while (l >= 0 && r < n) {
