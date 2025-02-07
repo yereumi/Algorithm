@@ -1,73 +1,70 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-	
-	public static int[] dx = new int[] { 0, 0, -1, 1 };
-	public static int[] dy = new int[] { -1, 1, 0, 0 };
-	
-	
-	public static int n;
-	public static int[][] board;
-	public static boolean[][] visited;
-	public static List<Integer> list = new ArrayList<>();
-	
-	public static boolean isValid(int y, int x) {
-		if (y >= 0 && y < n && x >= 0 && x < n) return true;
-		return false;
+
+	static int n;
+	static int[][] board;
+	static boolean[][] visited;
+	static int[] dy = new int[] { 0, 0, -1, 1 };
+	static int[] dx = new int[] { -1, 1, 0, 0 };
+
+	static boolean isValid(int y, int x) {
+		return y >= 0 && y < n && x >= 0 && x < n && !visited[y][x];
 	}
-	
+
+	static int bfs(int y, int x) {
+		Deque<int[]> dq = new ArrayDeque<>();
+		dq.offer(new int[] { y, x });
+		int cnt = 0;
+		while (!dq.isEmpty()) {
+			int[] now = dq.poll();
+			int nowY = now[0];
+			int nowX = now[1];
+			if (board[nowY][nowX] == 1) {
+				cnt++;
+				for (int i = 0; i < 4; i++) {
+					int nextY = nowY + dy[i];
+					int nextX = nowX + dx[i];
+					if (isValid(nextY, nextX)) {
+						dq.offer(new int[] { nextY, nextX });
+						visited[nextY][nextX] = true;
+					}
+				}
+			}
+		}
+		return cnt;
+	}
+
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		n = Integer.parseInt(br.readLine());
 		board = new int[n][n];
-		visited = new boolean[n][n];
-		
 		for (int i = 0; i < n; i++) {
-			String s = br.readLine();
+			String str = br.readLine();
 			for (int j = 0; j < n; j++) {
-				board[i][j] = Integer.parseInt(Character.toString(s.charAt(j)));
+				board[i][j] = Character.getNumericValue(str.charAt(j));
 			}
 		}
-		
-		Deque<int[]> dq = new ArrayDeque<>();
-		for (int i = 0; i < n * n; i++) {
-			int y = i / n;
-			int x = i % n;
-			
+		visited = new boolean[n][n];
+		List<Integer> house = new ArrayList<>();
+		int depth = 0;
+		while (depth < n * n) {
+			int y = depth / n;
+			int x = depth % n;
+			depth++;
 			if (visited[y][x]) continue;
-			if (board[y][x] == 0) {
-				visited[y][x] = true;
-				continue;
-			}
-			
-			int cnt = 0;
-			dq.offer(new int[] { y, x });
-			while (!dq.isEmpty()) {
-				int[] now = dq.poll();
-				int ny = now[0];
-				int nx = now[1];
-				if (!visited[ny][nx] && board[ny][nx] == 1) {
-					cnt++;
-					visited[ny][nx] = true;
-					for (int j = 0; j < 4; j++) {
-						int nny = ny + dy[j];
-						int nnx = nx + dx[j];
-						if (isValid(nny, nnx)) {
-							dq.offer(new int[] { nny, nnx });
-						}
-					}
-				}
-			}
-			list.add(cnt);
+			visited[y][x] = true;
+			int cnt = bfs(y, x);
+			if (cnt != 0) house.add(cnt);
 		}
-		
-		Collections.sort(list);
-		sb.append(list.size()).append("\n");
-		for (int i = 0; i < list.size(); i++) {
-			sb.append(list.get(i)).append("\n");
+		Collections.sort(house);
+		sb.append(house.size()).append("\n");
+		for (int i = 0; i < house.size(); i++) {
+			sb.append(house.get(i)).append("\n");
 		}
 		System.out.println(sb);
+		br.close();
 	}
 }
