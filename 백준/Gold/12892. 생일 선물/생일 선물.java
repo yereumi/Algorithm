@@ -2,17 +2,21 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
+	
+	private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) >= 48)
+            n = (n << 3) + (n << 1) + (c & 15);
+        return n;
+    }
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int n = Integer.parseInt(st.nextToken());
-		long d = Long.parseLong(st.nextToken());
+		int n = read();
+		long d = read();
 		long[][] present = new long[n][2];
 		for (int i = 0; i < n; i++) {
-			st = new StringTokenizer(br.readLine());
-			present[i][0] = Long.parseLong(st.nextToken());
-			present[i][1] = Long.parseLong(st.nextToken());
+			present[i][0] = read();
+			present[i][1] = read();
 		}
 		Arrays.sort(present, (o1, o2) -> {
 			if (o1[0] != o2[0])
@@ -29,8 +33,6 @@ public class Main {
             }
             maxSum = Math.max(maxSum, sum);
         }
-
 		System.out.println(maxSum);
-		br.close();
 	}
 }
