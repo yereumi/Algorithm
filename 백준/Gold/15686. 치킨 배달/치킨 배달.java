@@ -2,64 +2,74 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
+    
+	static int m, min;
+	static int[][] house, chicken;
+	static boolean[] visited;
 
-	public static int n, m, min;
-	public static int[][] arr;
-	public static List<int[]> home;
-	public static List<int[]> chicken;
-	public static boolean[] selectedChicken;
-
+	private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) >= 48)
+            n = (n << 3) + (n << 1) + (c & 15);
+        return n;
+    }
+	
 	public static int calculateMin() {
-		int sum = 0;
-		for (int[] pointH : home) {
-			int distance = n * n;
-			for (int i = 0; i < chicken.size(); i++) {
-				if (selectedChicken[i]) {
-					distance = Math.min(distance, Math.abs(chicken.get(i)[0] - pointH[0]) + Math.abs(chicken.get(i)[1] - pointH[1]));
+		int min = 0;
+		for (int[] h : house) {
+			int distance = Integer.MAX_VALUE;
+			for (int i = 0; i < visited.length; i++) {
+				if (visited[i]) {
+					distance = Math.min(distance, Math.abs(chicken[i][0] - h[0]) + Math.abs(chicken[i][1] - h[1]));
 				}
 			}
-			sum += distance;
+			min += distance;
 		}
-		return sum;
+		return min;
 	}
 	
-	public static void recursive(int depth, int start) {
+	public static int recursive(int depth, int start) {
 		if (depth == m) {
-			min = Math.min(min, calculateMin());
-			return;
+			return Math.min(min, calculateMin());
 		}
-		for (int i = start; i < chicken.size(); i++) {
-			if (!selectedChicken[i]) {
-				selectedChicken[i] = true;
-				recursive(depth + 1, i + 1);
-				selectedChicken[i] = false;
+		for (int i = start; i < chicken.length; i++) {
+			if (!visited[i]) {
+				visited[i] = true;
+				min = recursive(depth + 1, i + 1);
+				visited[i] = false;
 			}
 		}
+		return min;
 	}
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-		arr = new int[n][n];
-		chicken = new ArrayList<>();
-		home = new ArrayList<>();
-		min = n * n * n;
+		int n = read();
+		m = read();
+		int[][] arr = new int[n][n];
+		int hCnt = 0, cCnt = 0;
 		
+		int hIdx = 0, cIdx = 0;
 		for (int i = 0; i < n; i++) {
-			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < n; j++) {
-				arr[i][j] = Integer.parseInt(st.nextToken());
-				if (arr[i][j] == 1)
-					home.add(new int[] { i, j });
-				if (arr[i][j] == 2)
-					chicken.add(new int[] { i, j });
+				arr[i][j] = read();
+				if (arr[i][j] == 1) hCnt++;
+				if (arr[i][j] == 2) cCnt++;
 			}
 		}
-		
-		selectedChicken = new boolean[chicken.size()];
-		recursive(0, 0);
-		System.out.println(min);
+		house = new int[hCnt][2];
+		chicken = new int[cCnt][2];
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (arr[i][j] == 1) {
+					house[hIdx][0] = i; house[hIdx++][1] = j;
+				}
+				if (arr[i][j] == 2) {
+					chicken[cIdx][0] = i; chicken[cIdx++][1] = j;
+				}
+			}
+		}
+		min = Integer.MAX_VALUE;
+		visited = new boolean[chicken.length];
+		System.out.println(recursive(0, 0));
 	}
 }
