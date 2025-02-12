@@ -10,7 +10,6 @@ public class Main {
 		TreeSet<String> ts = new TreeSet<>((o1, o2) -> o1.length() != o2.length() ? o1.length() - o2.length() : o1.compareTo(o2));
 		for (int i = 0; i < n; i++) {
 			String word = br.readLine();
-			String len = Integer.toString(word.length());
 			ts.add(word);
 		}
 		List<String> list = new ArrayList<>(ts);
