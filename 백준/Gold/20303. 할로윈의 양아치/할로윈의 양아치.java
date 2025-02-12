@@ -49,7 +49,7 @@ public class Main {
 				group.add(new int[] { people, totalCandy });
 			}
 		}
-		Collections.sort(group, (o1, o2) -> o1[0] != o2[0] ? o1[0] - o2[0] : o2[1] - o1[1]);
+//		Collections.sort(group, (o1, o2) -> o1[0] != o2[0] ? o1[0] - o2[0] : o2[1] - o1[1]);
 		int[] dp = new int[k + 1];
 		for (int[] g : group) {
 			int people = g[0];
