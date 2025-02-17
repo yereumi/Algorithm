@@ -2,19 +2,14 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	
+
 	static Node root;
 	static StringBuilder sb;
 	
 	public static class Node {
-		int e = 0;
+		int e;
 		Node left;
 		Node right;
-		
-		Node() {
-			this.left = null;
-			this.right = null;
-		}
 		
 		Node(int e) {
 			this.e = e;
@@ -44,7 +39,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		sb = new StringBuilder();
-		root = new Node();
+		root = new Node(0);
 		String input;
 		while ((input = br.readLine()) != null) {
 			int n = Integer.parseInt(input);
