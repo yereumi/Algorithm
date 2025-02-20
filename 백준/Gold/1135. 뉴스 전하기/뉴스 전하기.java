@@ -26,7 +26,6 @@ public class Main {
 		int time = 0;
 		for (int i = 0; i < times.size(); i++) {
 			time = Math.max(time, times.get(i) + i + 1);
-
 		}
 		return time;
 	}
