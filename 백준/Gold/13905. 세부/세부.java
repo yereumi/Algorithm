@@ -39,8 +39,7 @@ public class Main {
 
 			for (int[] now : graph.get(v[0])) {
 				maxCount[now[0]] = v[1] >= now[1] ? Math.max(now[1], maxCount[now[0]]) : Math.max(v[1], maxCount[now[0]]);
-				if (maxCount[now[0]] > v[1]) continue;
-				pq.offer(new int[] { now[0], maxCount[now[0]] });
+				if (maxCount[now[0]] <= v[1]) pq.offer(new int[] { now[0], maxCount[now[0]] });
 			}
 		}
 		System.out.println(maxCount[e]);
