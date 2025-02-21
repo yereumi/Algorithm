@@ -3,12 +3,6 @@ import java.io.*;
 
 public class Main {
 
-	/**
-	 * 1. bfs로 순회하면서 빙산의 개수 줄이기 -> 다른 이차원 배열에 저장
-	 * 2. 빙산의 개수 세기 -> boolean으로 저장해서 while문 종료 조건
-	 * 3. 전부 다 녹을 때까지 두 덩어리 이상으로 분리되지 않으면 0 출력
-	 */
-
 	private static int read() throws Exception {
 		int c, n = System.in.read() & 15;
 		while ((c = System.in.read()) >= 48)
