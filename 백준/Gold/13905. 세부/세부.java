@@ -38,7 +38,7 @@ public class Main {
 			visited[v[0]] = true;
 
 			for (int[] now : graph.get(v[0])) {
-				maxCount[now[0]] = Math.max(maxCount[now[0]], Math.min(v[1], now[1]));
+				maxCount[now[0]] = v[1] >= now[1] ? Math.max(now[1], maxCount[now[0]]) : Math.max(v[1], maxCount[now[0]]);
 				if (maxCount[now[0]] > v[1]) continue;
 				pq.offer(new int[] { now[0], maxCount[now[0]] });
 			}
