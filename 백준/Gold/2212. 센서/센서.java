@@ -3,24 +3,35 @@ import java.io.*;
 
 public class Main {
 
+	private static int read() throws Exception {
+		int c, n = System.in.read() & 15;
+		boolean m = n == 13;
+		if (m)
+			n = System.in.read() & 15;
+		while ((c = System.in.read()) >= 48)
+			n = (n << 3) + (n << 1) + (c & 15);
+		return m ? ~n + 1 : n;
+	}
+
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		int k = Integer.parseInt(br.readLine());
-		int[] num = new int[n];
-		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = read();
+		int k = read();
+		int[] sensor = new int[n];
 		for (int i = 0; i < n; i++) {
-			num[i] = Integer.parseInt(st.nextToken());
+			sensor[i] = read();
 		}
-		Arrays.sort(num);
-		PriorityQueue<Integer> pq = new PriorityQueue<>();
+		Arrays.sort(sensor);
+		PriorityQueue<Long> distance = new PriorityQueue<>((o1, o2) -> Long.compare(o2, o1));
+		int totalDistance = 0;
 		for (int i = 0; i < n - 1; i++) {
-			pq.offer(num[i + 1] - num[i]);
+			long d = sensor[i + 1] - sensor[i];
+			distance.offer(d);
+			totalDistance += d;
 		}
-		int result = 0;
-		for (int i = 0; i < n - k; i++) {
-			result += pq.poll();
+		for (int i = 0; i < k - 1; i++) {
+			if (distance.isEmpty()) break;
+			totalDistance -= distance.poll();
 		}
-		System.out.println(result);
+		System.out.println(totalDistance);
 	}
 }
