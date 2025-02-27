@@ -13,12 +13,13 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		StringBuilder sb = new StringBuilder();
 		int t = read();
+        int n, m, v1, v2;
 		while (t-- > 0) {
-			int n = read();
-			int m = read();
+			n = read();
+			m = read();
 			for (int i = 0; i < m; i++) {
-				int v1 = read();
-				int v2 = read();
+				v1 = read();
+				v2 = read();
 			}
 			sb.append(n - 1).append("\n");
 		}
