@@ -16,15 +16,9 @@ public class Main {
 		while (t-- > 0) {
 			int n = read();
 			int m = read();
-			List<List<Integer>> graph = new ArrayList<>();
-			for (int i = 0; i < n + 1; i++) {
-				graph.add(new ArrayList<>());
-			}
 			for (int i = 0; i < m; i++) {
 				int v1 = read();
 				int v2 = read();
-				graph.get(v1).add(v2);
-				graph.get(v2).add(v1);
 			}
 			sb.append(n - 1).append("\n");
 		}
