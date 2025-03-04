@@ -11,11 +11,11 @@ public class Main {
 		String s2 = find(n2);
 		
 		if (s1.compareTo(s2) < 0) {
-			map.put(s2, s1);
-			network.put(s1, network.get(s1) + network.get(s2));
-		} else if (s1.compareTo(s2) > 0) {
 			map.put(s1, s2);
 			network.put(s2, network.get(s1) + network.get(s2));
+		} else if (s1.compareTo(s2) > 0) {
+			map.put(s2, s1);
+			network.put(s1, network.get(s1) + network.get(s2));
 		}
 	}
 	
