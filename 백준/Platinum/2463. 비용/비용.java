@@ -2,8 +2,8 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-
-	private static int read() throws Exception {
+    
+    static int read() throws Exception {
 		int c, n = System.in.read() & 15;
 		boolean m = n == 13;
 		if (m)
@@ -44,24 +44,20 @@ public class Main {
 			int x = read();
 			int y = read();
 			int w = read();
-			if (x < y)
-				list.add(new int[] { x, y, w });
-			else
-				list.add(new int[] { y, x, w });
+			if (x < y) list.add(new int[] { x, y, w });
+			else list.add(new int[] { y, x, w });
 			weightSum += w;
 		}
-
+        Collections.sort(list, (o1, o2) -> o2[2] - o1[2]);
+        
 		parent = new int[n + 1];
 		child = new int[n + 1];
-
 		for (int i = 1; i <= n; i++) {
 			parent[i] = i;
 			child[i] = 1;
 		}
 
 		long answer = 0;
-		Collections.sort(list, (o1, o2) -> o2[2] - o1[2]);
-
 		for (int[] now : list) {
 			answer += weightSum * union(now[0], now[1]);
 			answer %= 1000000000;
