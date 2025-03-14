@@ -17,7 +17,7 @@ public class Main {
 		int n = read();
 		int m = read();
 		long[][] board = new long[n + 1][n + 1];
-		for (int i = 0; i <= n; i++) {
+		for (int i = 1; i <= n; i++) {
 			Arrays.fill(board[i], Integer.MAX_VALUE);
 			board[i][i] = 0L;
 		}
