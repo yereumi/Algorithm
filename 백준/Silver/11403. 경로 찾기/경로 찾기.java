@@ -2,7 +2,9 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    
+
+	static StringBuilder sb;
+
 	static int read() throws Exception {
 		int c, n = System.in.read() & 15;
 		while ((c = System.in.read()) >= 48)
@@ -11,7 +13,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) throws Exception {
-		StringBuilder sb = new StringBuilder();
+		sb = new StringBuilder();
 		int n = read();
 		int[][] board = new int[n][n];
 		for (int i = 0; i < n; i++) {
