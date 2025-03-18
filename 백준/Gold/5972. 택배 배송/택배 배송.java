@@ -31,7 +31,6 @@ public class Main {
 		distance[1] = 0;
 		PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
 		pq.offer(new int[] { 1, 0 });
-		
 		while (!pq.isEmpty()) {
 			int[] now = pq.poll();
 			if (visited[now[0]]) continue;
