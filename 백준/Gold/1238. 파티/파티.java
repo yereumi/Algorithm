@@ -27,7 +27,7 @@ public class Main {
 			dist[start] = 0;
 			
 			for (int[] next : graph.get(now[0])) {
-				if (dist[next[0]] > dist[now[0]] + next[1]) {
+				if (!visited[next[0]] && dist[next[0]] > dist[now[0]] + next[1]) {
 					dist[next[0]] = dist[now[0]] + next[1];
 					pq.offer(new int[] { next[0], dist[next[0]] });
 				}
