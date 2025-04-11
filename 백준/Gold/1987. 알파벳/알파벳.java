@@ -2,11 +2,19 @@
  * 시간 2초: 2억번 안에 연산
  * 최대 메모리 256MB: int 기준 대략 256 * 1000 * 1000 / 4 = 64_000_000개 할당 가능
  * 1<=R,C<=20 -> O(N^3)까지 가능(시간은 신경쓰지 않아도 됨)
+ * 알파벳은 26개 -> 비트마스킹으로 알파벳 방문 여부 체크
  */
 import java.util.*;
 import java.io.*;
 
 public class Main {
+	static int read() throws Exception {
+		int c, n = System.in.read() & 15;
+		while ((c = System.in.read()) >= 48)
+			n = (n << 3) + (n << 1) + (c & 15);
+		return n;
+	}
+	
 	static int r, c, maxCnt;
 	static char[][] board;
 	static boolean[][] visited;
@@ -18,19 +26,18 @@ public class Main {
 		return y >= 0 && y < r && x >= 0 && x < c;
 	}
 	
-	static void dfs(int y, int x, int cnt) {
+	static void dfs(int y, int x, int used, int cnt) {
+		maxCnt = Math.max(maxCnt, cnt);
+
 		for (int i = 0; i < 4; i++) {
 			int ny = y + dy[i], nx = x + dx[i];
-			if (isValid(ny, nx) && !visited[ny][nx] && !list.contains(board[ny][nx])) {
-				visited[ny][nx] = true;
-				list.add(board[ny][nx]);
-				dfs(ny, nx, cnt + 1);
-				visited[ny][nx] = false;
-				list.remove(list.size() - 1);
-				
+			if (!isValid(ny, nx)) continue;
+			
+			int nextChar = board[ny][nx] - 'A';
+			if ((used & (1 << nextChar)) == 0) {
+				dfs(ny, nx, used | (1 << nextChar), cnt + 1);
 			}
 		}
-		maxCnt = Math.max(maxCnt, cnt);
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -45,12 +52,9 @@ public class Main {
 				board[i][j] = str.charAt(j);
 			}
 		}
-		visited = new boolean[r][c];
-		visited[0][0] = true;
-		list = new ArrayList<>();
-		list.add(board[0][0]);
 		maxCnt = 0;
-		dfs(0, 0, 1);
+		int start = 1 << (board[0][0] - 'A');
+		dfs(0, 0, start, 1);
 		System.out.println(maxCnt);
 	}
 }
