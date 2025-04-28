@@ -2,45 +2,55 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	static int n, k, l;
+	static int n, k, l, nowR, nowC;
+	static char d;
 	static int[][] board;
 	static Deque<String[]> direction;
 	
+	static void changeDirection() {
+		String[] dir = direction.poll();
+		if (dir[1].equals("L")) {
+			if (d == 'L') d = 'D';
+			else if (d == 'R') d = 'U';
+			else if (d == 'U') d = 'L';
+			else if (d == 'D') d = 'R';
+		}
+		if (dir[1].equals("D")) {
+			if (d == 'L') d = 'U';
+			else if (d == 'R') d = 'D';
+			else if (d == 'U') d = 'R';
+			else if (d == 'D') d = 'L';
+		}
+	}
+	
+	static void updateRowCol() {
+		if (d == 'L') nowC--;
+		if (d == 'R') nowC++;
+		if (d == 'U') nowR--;
+		if (d == 'D') nowR++;
+	}
+	
 	static int play() {
-		int time = 1, nowR = 1, nowC = 1;
-		char d = 'R';
+		int time = 1;
+		nowR = nowC = 1;
+		d = 'R';
 		Deque<int[]> snake = new ArrayDeque<>();
 		snake.offer(new int[] { 1, 1 });
 		
 		while (true) {
-			if (d == 'L') nowC--;
-			if (d == 'R') nowC++;
-			if (d == 'U') nowR--;
-			if (d == 'D') nowR++;
+			updateRowCol();
 			if (board[nowR][nowC] == 2 || board[nowR][nowC] == 3) return time;
-			
 			if (board[nowR][nowC] == 0) {
 				int[] last = snake.poll();
 				board[last[0]][last[1]] = 0;
-			} else if (board[nowR][nowC] == 1) {
+			}
+			if (board[nowR][nowC] == 1) {
 				board[nowR][nowC] = 0;
 			}
 			snake.offer(new int[] { nowR, nowC });
 			board[nowR][nowC] = 3;
 			if (!direction.isEmpty() && Integer.parseInt(direction.peek()[0]) == time) {
-				String[] dir = direction.poll();
-				if (dir[1].equals("L")) {
-					if (d == 'L') d = 'D';
-					else if (d == 'R') d = 'U';
-					else if (d == 'U') d = 'L';
-					else if (d == 'D') d = 'R';
-				}
-				if (dir[1].equals("D")) {
-					if (d == 'L') d = 'U';
-					else if (d == 'R') d = 'D';
-					else if (d == 'U') d = 'R';
-					else if (d == 'D') d = 'L';
-				}
+				changeDirection();
 			}
 			time++;
 		}	
