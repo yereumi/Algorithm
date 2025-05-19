@@ -14,7 +14,7 @@ public class Main {
 
 	public static int bfs() {
 		Deque<int[]> dq = new ArrayDeque<>();
-		dq.offer(new int[] { 0, 0, 0 }); // y좌표, x좌표, 벽 부순 유무
+		dq.offer(new int[] { 0, 0, 0 }); // y좌표, x좌표, 현재까지 벽을 부순 개수
 
 		int[][][] visited = new int[k + 1][n][m];
 		visited[0][0][0] = 1;
@@ -36,7 +36,7 @@ public class Main {
 					if (board[ny][nx] == '0' && visited[w][ny][nx] == 0) { // 벽이 아니고, 방문하지 않았을 때
 						visited[w][ny][nx] = visited[w][y][x] + 1;
 						dq.offer(new int[] { ny, nx, w });
-					} else if (board[ny][nx] == '1' && w + 1 <= k && visited[w + 1][ny][nx] == 0) { // 벽이고, 벽을 부수지 않았을 때
+					} else if (board[ny][nx] == '1' && w < k && visited[w + 1][ny][nx] == 0) { // 벽이고, 벽을 부수지 않았을 때
 						visited[w + 1][ny][nx] = visited[w][y][x] + 1;
 						dq.offer(new int[] { ny, nx, w + 1 });
 					}
