@@ -57,7 +57,7 @@ public class Main {
         				coastVisited[nr][nc] = true;
         			}
         			
-        			if (!visited[nr][nc] && !coastVisited[nr][nc] && board[nr][nc] == 1) {
+        			if (board[nr][nc] == 1 && !visited[nr][nc] && !coastVisited[nr][nc]) {
             			min = Math.min(min, nd - 1);
             		}
         		}
