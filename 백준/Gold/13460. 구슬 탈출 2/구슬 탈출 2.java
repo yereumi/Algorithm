@@ -13,7 +13,6 @@ public class Main {
         return r >= 1 && r < n - 1 && c >= 1 && c < m - 1;
     }
 
-    // r,c에서 dir로 끝까지 굴린 결과: {최종r, 최종c, 이동칸수, 구멍여부(1/0)}
     static int[] roll(int r, int c, int dir) {
         int steps = 0;
         int nr = r, nc = c;
@@ -22,9 +21,9 @@ public class Main {
             int tr = nr + dr[dir];
             int tc = nc + dc[dir];
             char cell = board[tr][tc];
-            if (cell == '#') break;          // 벽 앞에서 멈춤
+            if (cell == '#') break;
             nr = tr; nc = tc; steps++;
-            if (cell == 'O') {               // 구멍에 빠짐
+            if (cell == 'O') {
                 return new int[]{nr, nc, steps, 1};
             }
         }
@@ -40,20 +39,17 @@ public class Main {
 
         while (!dq.isEmpty()) {
             int[] now = dq.poll();
-            if (now[4] >= 10) continue; // 10번 이하만 허용
+            if (now[4] >= 10) continue;
 
             for (int dir = 0; dir < 4; dir++) {
                 int[] r = roll(now[0], now[1], dir);
                 int[] b = roll(now[2], now[3], dir);
 
-                // 파란 구슬이 빠지면 실패 분기
                 if (b[3] == 1) continue;
-                // 빨간만 빠지면 성공
                 if (r[3] == 1) return now[4] + 1;
 
                 int nrr = r[0], nrc = r[1], nbr = b[0], nbc = b[1];
 
-                // 두 구슬이 같은 칸에 멈추면 더 멀리 이동한 쪽을 한 칸 뒤로
                 if (nrr == nbr && nrc == nbc) {
                     if (r[2] > b[2]) {
                         nrr -= dr[dir];
@@ -85,7 +81,7 @@ public class Main {
             String str = br.readLine();
             for (int j = 0; j < m; j++) {
                 board[i][j] = str.charAt(j);
-                if (board[i][j] == 'O') { // 구멍은 'O'
+                if (board[i][j] == 'O') {
                     hr = i; hc = j;
                 } else if (board[i][j] == 'R') {
                     beads[0] = i; beads[1] = j;
