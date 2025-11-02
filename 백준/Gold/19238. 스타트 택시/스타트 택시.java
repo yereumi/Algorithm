@@ -74,9 +74,7 @@ public class Main {
 		
 		if (f <= 0) return false;
 		
-		if (r == endList[goal][0] && c == endList[goal][1]) {
-			return true;
-		}
+		if (r == endList[goal][0] && c == endList[goal][1]) return true;
 		
 		while (!dq.isEmpty()) {
 			int[] now = dq.poll();
@@ -99,6 +97,7 @@ public class Main {
 				}
 			}
 		}
+		
 		return false;
 	}
 	
