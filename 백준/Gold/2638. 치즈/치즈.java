@@ -1,100 +1,95 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
 
-	private static int read() throws Exception {
-		int c, n = System.in.read() & 15;
-		while ((c = System.in.read()) >= 48)
-			n = (n << 3) + (n << 1) + (c & 15);
-		return n;
-	}
-
 	static int n, m;
-	static boolean flag;
-	static int[][] cheese;
-	static boolean[][] isOuter;
+	static int[][] board; // 0: 빈 공간, 1: 치즈
+	static boolean[][] visited;
 
-	static int[] dy = new int[] { 0, 0, -1, 1 };
-	static int[] dx = new int[] { -1, 1, 0, 0 };
+	static int[] dr = new int[] { -1, 1, 0, 0 };
+	static int[] dc = new int[] { 0, 0, -1, 1 };
 
-	static boolean isValid(int y, int x) {
-		return y >= 0 && y < n && x >= 0 && x < m;
+	static boolean isValid(int r, int c) {
+		return r >= 0 && r < n && c >= 0 && c < m;
 	}
 
-	static void checkOuterSpace() {
+	static void checkOutAir(int r, int c) {
 		Deque<int[]> dq = new ArrayDeque<>();
-		boolean[][] visited = new boolean[n][m];
-		dq.offer(new int[] { 0, 0 });
+		dq.offer(new int[] { r, c });
+		visited[r][c] = true;
 
 		while (!dq.isEmpty()) {
 			int[] now = dq.poll();
-			int y = now[0];
-			int x = now[1];
-			isOuter[y][x] = true;
 
 			for (int i = 0; i < 4; i++) {
-				int ny = y + dy[i];
-				int nx = x + dx[i];
-				if (isValid(ny, nx) && cheese[ny][nx] == 0 & !visited[ny][nx]) {
-					visited[ny][nx] = true;
-					dq.offer(new int[] { ny, nx });
+				int nr = now[0] + dr[i];
+				int nc = now[1] + dc[i];
+
+				if (isValid(nr, nc) && board[nr][nc] == 0 && !visited[nr][nc]) {
+					dq.offer(new int[] { nr, nc });
+					board[nr][nc] = -1;
+					visited[nr][nc] = true;
 				}
 			}
 		}
 	}
 
-	static void changeStatus() {
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				if (cheese[i][j] == 2)
-					cheese[i][j] = 0;
-			}
+	static void checkMeltCheese(int r, int c) {
+		int cnt = 0;
+		for (int j = 0; j < 4; j++) {
+			int nr = r + dr[j];
+			int nc = c + dc[j];
+			if (isValid(nr, nc) && board[nr][nc] == -1) cnt++;
 		}
+		if (cnt >= 2) board[r][c] = 2;
 	}
 
-	static void bfs(int depth) {
-		int y = depth / m;
-		int x = depth % m;
-		int airCnt = 0;
-
-		if (cheese[y][x] == 1) {
-			for (int i = 0; i < 4; i++) {
-				int ay = y + dy[i];
-				int ax = x + dx[i];
-				if (isValid(ay, ax) && cheese[ay][ax] == 0 && isOuter[ay][ax]) {
-					airCnt++;
-				}
-			}
-			if (airCnt >= 2) {
-				cheese[y][x] = 2;
-				flag = false;
-			}
-		}
-
-	}
-
-	public static void main(String[] args) throws Exception {
-		n = read();
-		m = read();
-		cheese = new int[n][m];
-		isOuter = new boolean[n][m];
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
+		board = new int[n][m];
 		for (int i = 0; i < n; i++) {
+			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < m; j++) {
-				cheese[i][j] = read();
+				board[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
+
+		visited = new boolean[n][m];
+		board[0][0] = -1;
+		checkOutAir(0, 0);
+		
 		int time = 0;
-		while (true) {
-			flag = true;
-			changeStatus();
-			checkOuterSpace();
-			for (int i = 0; i < n * m; i++) {
-				bfs(i);
+		int cheeseCnt = Integer.MAX_VALUE;
+
+		while (cheeseCnt != 0) {
+			cheeseCnt = 0;
+			visited = new boolean[n][m];
+			
+			checkOutAir(0, 0);
+
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < m; j++) {
+					if (!visited[i][j] && board[i][j] == 1) {
+						checkMeltCheese(i, j);
+					}
+				}
 			}
-			if (flag) break;
+
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < m; j++) {
+					if (board[i][j] == 2) board[i][j] = -1;
+					if (board[i][j] == 1) cheeseCnt++;
+					if (board[i][j] == -1) board[i][j] = 0;
+				}
+			}
+
 			time++;
 		}
+
 		System.out.println(time);
 	}
 }
