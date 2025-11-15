@@ -4,10 +4,11 @@ import java.util.*;
 public class Main {
 	
 	static int n, m, w;
+	static int INF = Integer.MAX_VALUE;
 	
 	static boolean shortestPath(int[][] edges) {
 		long[] dist = new long[n + 1];
-		Arrays.fill(dist, Integer.MAX_VALUE);
+		Arrays.fill(dist, INF);
 		dist[1] = 0;
 		
 		for (int i = 0; i < n - 1; i++) {
@@ -16,7 +17,7 @@ public class Main {
 				int d = e[1];
 				int w = e[2];
 				
-				if (dist[s] != Long.MAX_VALUE && dist[s] + w < dist[d]) {
+				if (dist[s] + w < dist[d]) {
 					dist[d] = dist[s] + w;
 				}
 			}
@@ -27,7 +28,7 @@ public class Main {
 			int d = e[1];
 			int w = e[2];
 			
-			if (dist[s] != Long.MAX_VALUE && dist[s] + w < dist[d]) {
+			if (dist[s] + w < dist[d]) {
 				return true;
 			}
 		}
