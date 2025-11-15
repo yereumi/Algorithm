@@ -16,30 +16,27 @@ public class Main {
 		dist[start] = money[start];
 		
 		for (int i = 0; i < n - 1; i++) {
-			for (int[] e : edges) {
-				int s = e[0];
-				int f = e[1];
-				int w = e[2];
-				
-				if (dist[s] != INF && dist[s] + w > dist[f]) {
-					dist[f] = dist[s] + w;
-				}
-			}
+			boolean updated = false;
+
+		    for (int[] e : edges) {
+		        int s = e[0], f = e[1], w = e[2];
+		        if (dist[s] != INF && dist[s] + w > dist[f]) {
+		            dist[f] = dist[s] + w;
+		            updated = true;
+		        }
+		    }
+
+		    if (!updated) break; 
 		}
 		
-		List<Integer> updateVertexes = new ArrayList<>();
 		for (int[] e : edges) {
 			int s = e[0];
 			int f = e[1];
 			int w = e[2];
 			
 			if (dist[s] != INF && dist[s] + w > dist[f]) {
-				updateVertexes.add(f);
+				if (bfs(f)) return false;
 			}
-		}
-		
-		for (int v : updateVertexes) {
-			if (bfs(v)) return false;
 		}
 		
 		return true;
@@ -79,6 +76,7 @@ public class Main {
 		for (int i = 0; i < n ; i++) {
 			graph.add(new ArrayList<>());
 		}
+        
 		edges = new int[m][3];
 		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
