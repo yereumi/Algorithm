@@ -18,15 +18,12 @@ public class Main {
 		
 		if (x == y) return;
 		
-		
-		
 		if (x < y) {
 			parent[y] = x;
 			for (int i = 1; i <= n; i++) {
 				if (parent[i] == y) parent[i] = x;
 			}
-		}
-		else {
+		} else {
 			parent[x] = y;
 			for (int i = 1; i <= n; i++) {
 				if (parent[i] == x) parent[i] = y;
