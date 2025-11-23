@@ -74,8 +74,8 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		l = Integer.parseInt(st.nextToken());
-		board = new int[n][n];
-		
+
+        board = new int[n][n];
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < n; j++) {
@@ -98,10 +98,7 @@ public class Main {
 				}
 			}
 			
-			if (flag) {
-				answer++;
-//				System.out.println("row: " + i);
-			}
+			if (flag) answer++;	
 		}
 		
 		// 세로
@@ -117,10 +114,7 @@ public class Main {
 				}
 			}
 			
-			if (flag) {
-				answer++;
-//				System.out.println("column: " + i);
-			}		
+			if (flag) answer++;	
 		}
 		
 		System.out.println(answer);
