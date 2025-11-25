@@ -2,7 +2,7 @@ import java.util.*;
 
 class Solution {
     
-    static int n, answer;
+    static int n;
     static List<List<String>> candidates;
     static Map<String, Boolean> map;
     static Set<String> set;
@@ -16,17 +16,13 @@ class Solution {
                 tmp = tmp + "-" + s;
             }
             
-            if (!set.contains(tmp)) {
-                answer++;
-                set.add(tmp);
-            }
+            set.add(tmp);
             
             return;
         }
         
         for (String c : candidates.get(depth)) {
             if (!map.get(c)) {
-                // System.out.println("d: " + depth + ", c: " + c);
                 map.put(c, true);
                 dfs(depth + 1, str + "-" + c);
                 map.put(c, false);
@@ -35,7 +31,6 @@ class Solution {
     }
     
     static public int solution(String[] user_id, String[] banned_id) {
-        answer = 0;
         n = banned_id.length;
         set = new HashSet<>();
         map = new HashMap<>();
@@ -71,6 +66,6 @@ class Solution {
         
         dfs(0, "");
         
-        return answer;
+        return set.size();
     }
 }
