@@ -53,9 +53,7 @@ class Solution {
                     }
                 }
                 
-                if (flag) {
-                    candidates.get(b).add(user);
-                }
+                if (flag) candidates.get(b).add(user);
             }
         }
         
