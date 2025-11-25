@@ -11,12 +11,7 @@ class Solution {
         if (depth == n) {
             String[] arr = str.split("-");
             Arrays.sort(arr);
-            String tmp = "";
-            for (String s : arr) {
-                tmp = tmp + "-" + s;
-            }
-            
-            set.add(tmp);
+            set.add(Arrays.toString(arr));
             
             return;
         }
