@@ -3,7 +3,9 @@ import java.util.*;
 
 public class Main {
 	
-	static int chooseSeat(List<Integer> occupied, int n) {
+	static int n, t, p;
+	
+	static int chooseSeat(List<Integer> occupied) {
         Collections.sort(occupied);
 
         int bestSeat = 1;
@@ -38,9 +40,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int t = Integer.parseInt(st.nextToken());
-        int p = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
+        t = Integer.parseInt(st.nextToken());
+        p = Integer.parseInt(st.nextToken());
 
         boolean[][] times = new boolean[n + 1][721];
         String[][] reservations = new String[t][2];
@@ -69,7 +71,7 @@ public class Main {
             int seatToUse;
 
             if (occupied.isEmpty()) seatToUse = 1;
-            else seatToUse = chooseSeat(occupied, n);
+            else seatToUse = chooseSeat(occupied);
 
             for (int m = startTime; m < endTime; m++) {
                 times[seatToUse][m] = true;
