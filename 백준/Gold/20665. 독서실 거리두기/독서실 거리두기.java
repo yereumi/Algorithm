@@ -61,7 +61,7 @@ public class Main {
 
         for (int i = 0; i < t; i++) {
             int startTime = toMinute(reservations[i][0]);
-            int endTime   = toMinute(reservations[i][1]);
+            int endTime = toMinute(reservations[i][1]);
 
             List<Integer> occupied = new ArrayList<>();
             for (int j = 1; j <= n; j++) {
