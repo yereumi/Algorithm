@@ -15,19 +15,17 @@ public class Main {
 		}
 
 		int result = 0;
-
 		for (int[] t : tree.get(v)) {
-			int nextV = t[0];
-			int nextD = t[1];
-			
+            int nextV = t[0];
+            int nextD = t[1];
+            
 			if (visited[nextV]) continue;
 			visited[nextV] = true;
 			
 			result += destroy(nextV, nextD);
 		}
 		
-		if (result < d) return result;
-		return d;
+		return result < d ? result : d;
 	}
 	
     public static void main(String[] args) throws Exception {
