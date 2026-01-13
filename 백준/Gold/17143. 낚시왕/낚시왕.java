@@ -14,7 +14,6 @@ public class Main {
 				
 				int shark = board[j][i];
 				answer += sharks[shark][4];
-//				System.out.println(sharks[shark][4]);
 				sharks[shark][0] = -1;
 				sharks[shark][1] = -1;
 				board[j][i] = 0;
@@ -89,7 +88,6 @@ public class Main {
 	                sharks[i][1] = -1;
 	            }
 	        }
-			
 		}
 		
 		for (int i = 1; i <= R; i++) {
