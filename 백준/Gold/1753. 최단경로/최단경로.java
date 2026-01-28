@@ -2,56 +2,68 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
+	
+	static final int INF = Integer.MAX_VALUE;
+	
+	static int V, E, K;
+	static List<List<int[]>> graph;
+	static int[] dist;
+	
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int v = Integer.parseInt(st.nextToken());
-		int e = Integer.parseInt(st.nextToken());
-		int k = Integer.parseInt(br.readLine());
-		List<List<int[]>> graph = new ArrayList<>();
-		for (int i = 0; i <= v; i++) {
+		V = Integer.parseInt(st.nextToken());
+		E = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(br.readLine());
+		
+		graph = new ArrayList<>();
+		for (int i = 0; i <= V; i++) {
 			graph.add(new ArrayList<>());
 		}
-		for (int i = 0; i < e; i++) {
+		
+		for (int i = 0; i < E; i++) {
 			st = new StringTokenizer(br.readLine());
-			int v1 = Integer.parseInt(st.nextToken());
-			int v2 = Integer.parseInt(st.nextToken());
+			int u = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
 			int w = Integer.parseInt(st.nextToken());
-			graph.get(v1).add(new int[] { v2, w });
+			
+			graph.get(u).add(new int[] { v, w });
 		}
 		
-		int[] distance = new int[v + 1];
-		Arrays.fill(distance, Integer.MAX_VALUE);
-		distance[k] = 0;
+		dist = new int[V + 1];
+		Arrays.fill(dist, INF);
+		dist[K] = 0;
+		
 		PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
-		pq.add(new int[] { k, 0 });
+		pq.offer(new int[] { K, 0 });
+		
 		while (!pq.isEmpty()) {
-			int[] now = pq.poll();
-			int u = now[0];
-			int w = now[1];
+			int[] cur = pq.poll();
 			
-			if (w > distance[u]) continue;
+			int curNode = cur[0];
+			int curDist = cur[1];
 			
-			for (int[] edge : graph.get(u)) {
-				int nu = edge[0];
-				int nw = edge[1];
-				if (distance[u] + nw < distance[nu]) {
-					distance[nu] = distance[u] + nw;
-					pq.add(new int[] { nu, distance[nu] });
+			if (curDist > dist[curNode]) continue;
+			
+			for (int[] next : graph.get(curNode)) {
+				int nextNode = next[0];
+				int nextDist = next[1] + curDist;
+				
+				if (dist[nextNode] > nextDist) {
+					dist[nextNode] = nextDist;
+					pq.offer(new int[] { nextNode, nextDist });
 				}
 			}
 		}
-
-		for (int i = 1; i <= v; i++) {
-			if (distance[i] == Integer.MAX_VALUE) {
-				sb.append("INF");
-			} else {
-				sb.append(distance[i]);
-			}
+		
+		for (int i = 1; i <= V; i++) {
+			if (dist[i] == INF) sb.append("INF");
+			else sb.append(dist[i]);
 			sb.append("\n");
 		}
-		System.out.println(sb);
+		
+		System.out.println(sb.toString());
+		br.close();
 	}
 }
