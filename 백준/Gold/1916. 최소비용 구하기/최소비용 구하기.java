@@ -1,61 +1,65 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
 	
-	static int n, start, end, minCost = Integer.MAX_VALUE;
-	static int[] distance;
-	static List<List<int[]>> graph;
-	static PriorityQueue<int[]> pq;
+	static final long INF = Long.MAX_VALUE;
 	
-	public static void dijkstra() {
-		distance = new int[n + 1];
-		Arrays.fill(distance, Integer.MAX_VALUE);
-		distance[start] = 0;
-		
-		pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
-		pq.add(new int[] { start, 0 });
-		while (!pq.isEmpty()) {
-			int[] now = pq.poll();
-			int current = now[0];
-			int currentDistance = now[1];
-			
-			if (distance[current] < currentDistance) continue;
-			
-			for (int[] edge : graph.get(current)) {
-				int next = edge[1];
-				int nextDistance = edge[2];
-				if (distance[current] + nextDistance < distance[next]) {
-					distance[next] = distance[current] + nextDistance;
-					pq.add(new int[] { next, nextDistance });
-				}
-			}
-		}
-	}
+	static int N, M;
+	static List<List<int[]>> graph;
+	static long[] dist;
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(br.readLine());
-		int m = Integer.parseInt(br.readLine());
+		N = Integer.parseInt(br.readLine());
+		M = Integer.parseInt(br.readLine());
+		
 		graph = new ArrayList<>();
-		for (int i = 0; i <= n; i++) {
+		for (int i = 0; i <= N; i++) {
 			graph.add(new ArrayList<>());
 		}
 		
 		StringTokenizer st;
-		for (int i = 0; i < m; i++) {
+		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int v1 = Integer.parseInt(st.nextToken());
-			int v2 = Integer.parseInt(st.nextToken());
-			int d = Integer.parseInt(st.nextToken());
-			graph.get(v1).add(new int[] { v1, v2, d });
+			int start = Integer.parseInt(st.nextToken());
+			int end = Integer.parseInt(st.nextToken());
+			int cost = Integer.parseInt(st.nextToken());
+			
+			graph.get(start).add(new int[] { end, cost });
 		}
+		
 		st = new StringTokenizer(br.readLine());
-		start = Integer.parseInt(st.nextToken());
-		end = Integer.parseInt(st.nextToken());
+		int start = Integer.parseInt(st.nextToken());
+		int end = Integer.parseInt(st.nextToken());
 		
-		dijkstra();
+		dist = new long[N + 1];
+		Arrays.fill(dist, INF);
+		dist[start] = 0;
 		
-		System.out.println(distance[end]);
+		PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
+		pq.offer(new int[] { start, 0 });
+		
+		while (!pq.isEmpty()) {
+			int[] cur = pq.poll();
+			
+			int curNode = cur[0];
+			int curDist = cur[1];
+			
+			if (dist[curNode] < curDist) continue;
+			
+			for (int[] next : graph.get(curNode)) {
+				int nextNode = next[0];
+				int nextDist = next[1] + curDist;
+				
+				if (dist[nextNode] > nextDist) {
+					dist[nextNode] = nextDist;
+					pq.offer(new int[] { nextNode, nextDist });
+				}
+			}
+		}
+		
+		System.out.println(dist[end]);
+		br.close();
 	}
 }
