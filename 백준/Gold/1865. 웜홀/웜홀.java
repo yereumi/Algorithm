@@ -21,6 +21,7 @@ public class Main {
 			Arrays.fill(dist, INF);
 			dist[0] = 0;
 			
+            // 슈퍼 소스
 			for (int i = 1; i <= N; i++) {
 			    edges.add(new int[] { 0, i, 0 });
 			}
