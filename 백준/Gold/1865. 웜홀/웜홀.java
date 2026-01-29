@@ -2,81 +2,77 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	
-	static int n, m, w;
-	static int INF = Integer.MAX_VALUE;
-	
-	static boolean shortestPath(int[][] edges) {
-		long[] dist = new long[n + 1];
-		Arrays.fill(dist, INF);
-		dist[1] = 0;
-		
-		for (int i = 0; i < n - 1; i++) {
-			for (int[] e : edges) {
-				int s = e[0];
-				int d = e[1];
-				int w = e[2];
-				
-				if (dist[s] + w < dist[d]) {
-					dist[d] = dist[s] + w;
-				}
-			}
-		}
-		
-		for (int[] e : edges) {
-			int s = e[0];
-			int d = e[1];
-			int w = e[2];
-			
-			if (dist[s] + w < dist[d]) {
-				return true;
-			}
-		}
-		
-		if (dist[1] < 0) return true;
-		return false;
-	}
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+	static final long INF = Long.MAX_VALUE;
+
+	public static void main(String[] args) throws Exception {
 		StringBuilder sb = new StringBuilder();
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int tc = Integer.parseInt(br.readLine());
+		StringTokenizer st;
 		while (tc-- > 0) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			n = Integer.parseInt(st.nextToken());
-			m = Integer.parseInt(st.nextToken());
-			w = Integer.parseInt(st.nextToken());
+			st = new StringTokenizer(br.readLine());
+			int N = Integer.parseInt(st.nextToken());
+			int M = Integer.parseInt(st.nextToken());
+			int W = Integer.parseInt(st.nextToken());
 			
-			int[][] edges = new int[m * 2 + w][3];
-			int idx = 0;
-			for (int i = 0; i < m; i++) {
+			List<int[]> edges = new ArrayList<>();
+			long[] dist = new long[N + 1];
+			Arrays.fill(dist, INF);
+			dist[0] = 0;
+			
+			for (int i = 1; i <= N; i++) {
+			    edges.add(new int[] { 0, i, 0 });
+			}
+			
+			for (int i = 0; i < M; i++) {
 				st = new StringTokenizer(br.readLine());
 				int s = Integer.parseInt(st.nextToken());
 				int e = Integer.parseInt(st.nextToken());
 				int t = Integer.parseInt(st.nextToken());
-				edges[idx][0] = s;
-				edges[idx][1] = e;
-				edges[idx++][2] = t;
-				edges[idx][0] = e;
-				edges[idx][1] = s;
-				edges[idx++][2] = t;
+				
+				edges.add(new int[] { s, e, t });
+				edges.add(new int[] { e, s, t });
 			}
-			for (int i = 0; i < w; i++) {
+			
+			for (int i = 0; i < W; i++) {
 				st = new StringTokenizer(br.readLine());
-				edges[idx][0] = Integer.parseInt(st.nextToken());
-				edges[idx][1] = Integer.parseInt(st.nextToken());
-				edges[idx++][2] = Integer.parseInt(st.nextToken()) * -1;
+				int s = Integer.parseInt(st.nextToken());
+				int e = Integer.parseInt(st.nextToken());
+				int t = Integer.parseInt(st.nextToken());
+				
+				edges.add(new int[] { s, e, -1 * t });
 			}
 			
-			if (shortestPath(edges)) {
-				sb.append("YES");
-			} else {
-				sb.append("NO");
+			for (int i = 0; i < N - 1; i++) {
+				for (int[] edge : edges) {
+					int from = edge[0];
+					int to = edge[1];
+					int cost = edge[2];
+					
+					if (dist[to] > dist[from] + cost) {
+						dist[to] = dist[from] + cost;
+					}
+				}
 			}
 			
-			sb.append("\n");
+			boolean flag = false;
+			
+			for (int[] edge : edges) {
+				int from = edge[0];
+				int to = edge[1];
+				int cost = edge[2];
+				
+				if (dist[to] > dist[from] + cost) {
+					flag = true;
+					break;
+				}
+			}
+			
+			sb.append(flag ? "YES" : "NO").append('\n');
 		}
 		
-		System.out.println(sb);
+		System.out.println(sb.toString());
+		br.close();
 	}
 }
