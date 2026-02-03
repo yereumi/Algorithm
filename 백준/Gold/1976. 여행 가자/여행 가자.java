@@ -1,59 +1,63 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-
-	private static int read() throws Exception {
-		int c, n = System.in.read() & 15;
-		while ((c = System.in.read()) >= 48)
-			n = (n << 3) + (n << 1) + (c & 15);
-		return n;
+	
+	static int N, M;
+	static int[] parent;
+	
+	static void union(int a, int b) {
+		int rootA = find(a);
+		int rootB = find(b);
+		
+		if (rootA == rootB) return;
+		
+		parent[rootB] = rootA;
 	}
-
-	static int[] num;
-
-	public static void union(int a, int b) {
-		if (find(a) != find(b)) {
-			num[find(a)] = find(b);
-		}
+	
+	static int find(int x) {
+	    if (parent[x] != x) {
+	        parent[x] = find(parent[x]);
+	    }
+	    return parent[x];
 	}
-
-	public static int find(int a) {
-		if (num[a] == a)
-			return a;
-		return num[a] = find(num[a]);
-	}
-
-	public static boolean isSame(int a, int b) {
-		return find(a) == find(b);
-	}
-
-	public static void main(String[] args) throws Exception {
-		int n = read();
-		int m = read();
-		num = new int[n];
-		for (int i = 0; i < n; i++) {
-			num[i] = i;
-		}
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				if (read() == 1) {
-					union(i, j);
-				}
-			}
-		}
-		int[] travel = new int[m];
-		for (int i = 0; i < m; i++) {
-			travel[i] = read() - 1;
-		}
-		boolean flag = true;
-		for (int i = 0; i < m - 1; i++) {
-			if (!isSame(travel[i], travel[i + 1])) {
-				flag = false;
-				break;
-			}
-		}
-		if (flag) System.out.println("YES");
-		else System.out.println("NO");
-	}
+	
+    public static void main(String[] args) throws Exception {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        M = Integer.parseInt(br.readLine());
+        parent = new int[N];
+        for (int i = 0; i < N; i++) {
+        	parent[i] = i;
+        }
+        
+        StringTokenizer st;
+        for (int i = 0; i < N; i++) {
+        	st = new StringTokenizer(br.readLine());
+        	for (int j = 0; j < N; j++) {
+        		int connect = Integer.parseInt(st.nextToken());
+        		
+        		if (connect == 1) {
+        			union(i, j);
+        		}
+        	}
+        }
+        
+        int[] city = new int[M];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < M; i++) {
+        	city[i] = Integer.parseInt(st.nextToken()) - 1;
+        }
+        
+        for (int i = 1; i < M; i++) {
+        	if (find(city[i - 1]) != find(city[i])) {
+        		System.out.println("NO");
+        		return;
+        	}
+        }
+        
+        System.out.println("YES");
+        
+        br.close();
+    }
 }
