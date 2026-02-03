@@ -1,53 +1,53 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-
-	private static int read() throws Exception {
-		int c, n = System.in.read() & 15;
-		while ((c = System.in.read()) >= 48)
-			n = (n << 3) + (n << 1) + (c & 15);
-		return n;
+	
+	static int n, m;
+	static int[] parent;
+	
+	static void union(int a, int b) {
+		int rootA = find(a);
+		int rootB = find(b);
+		
+		if (rootA == rootB) return;
+		
+		parent[rootB] = rootA;
 	}
-
-	static int[] num;
-
-	public static void union(int a, int b) {
-		if (find(a) != find(b)) {
-			num[find(a)] = find(b);
-		}
+	
+	static int find(int x) {
+	    if (parent[x] != x) {
+	        parent[x] = find(parent[x]);
+	    }
+	    return parent[x];
 	}
-
-	public static int find(int a) {
-		if (num[a] == a)
-			return a;
-		return num[a] = find(num[a]);
-	}
-
-	public static boolean isSame(int a, int b) {
-		return find(a) == find(b);
-	}
-
-	public static void main(String[] args) throws Exception {
-		StringBuilder sb = new StringBuilder();
-		int n = read();
-		int m = read();
-		num = new int[n + 1];
-		for (int i = 0; i < n + 1; i++) {
-			num[i] = i;
-		}
-		for (int i = 0; i < m; i++) {
-			int f = read();
-			int a = read();
-			int b = read();
-
-			if (f == 0) {
-				union(a, b);
-			} else if (f == 1) {
-				String result = isSame(a, b) ? "YES" : "NO";
-				sb.append(result).append("\n");
-			}
-		}
-		System.out.println(sb);
-	}
+	
+    public static void main(String[] args) throws Exception {
+        StringBuilder sb = new StringBuilder();
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        parent = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+        	parent[i] = i;
+        }
+        
+        for (int i = 0; i < m; i++) {
+        	st = new StringTokenizer(br.readLine());
+        	int op = Integer.parseInt(st.nextToken());
+        	int a = Integer.parseInt(st.nextToken());
+        	int b = Integer.parseInt(st.nextToken());
+        	
+        	if (op == 0) {
+        		union(a, b);
+        	} else {
+        		sb.append(find(a) == find(b) ? "YES" : "NO").append("\n");
+        	}
+        }
+        
+        System.out.println(sb.toString());
+        
+        br.close();
+    }
 }
