@@ -1,50 +1,64 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
+	
+	static int N, M;
+	static int[] parent;
+	static List<int[]> graph;
 
+	static int find(int x) {
+		if (parent[x] != x) {
+			parent[x] = find(parent[x]); // 경로 압축
+		}
+		return parent[x];
+	}
+
+	static void union(int a, int b) {
+		int rootA = find(a);
+		int rootB = find(b);
+
+		if (rootA == rootB) return;
+
+		parent[rootB] = rootA;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int n = Integer.parseInt(st.nextToken());
-		int m = Integer.parseInt(st.nextToken());
-		List<List<int[]>> graph = new ArrayList<>();
-		for (int i = 0; i <= n; i++) {
-			graph.add(new ArrayList<>());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		parent = new int[N + 1];
+		for (int i = 0; i <= N; i++) {
+			parent[i] = i;
 		}
-		for (int i = 1; i <= m; i++) {
+		
+		graph = new ArrayList<>();
+		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
 			int c = Integer.parseInt(st.nextToken());
-			graph.get(a).add(new int[] { b, c });
-			graph.get(b).add(new int[] { a, c });
+			
+			graph.add(new int[] { a, b, c });
 		}
-		PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
-		pq.add(new int[] { 1, 0 });
-		boolean[] visited = new boolean[n + 1];
-		int weightSum = 0;
-		int maxWeight = 0;
-		while (!pq.isEmpty()) {
-			int[] now = pq.poll();
-			int u = now[0];
-			int w = now[1];
-
-			if (visited[u])
-				continue;
-			weightSum += w;
-			if (w > maxWeight) maxWeight = w;
-			visited[u] = true;
-			for (int[] next : graph.get(u)) {
-				int nu = next[0];
-				int nw = next[1];
-				pq.add(new int[] { nu, nw });
+		
+		Collections.sort(graph, (o1, o2) -> o1[2] - o2[2]);
+		long cost = 0;
+		int cnt = 0;
+		for (int i = 0; i < M; i++) {
+			if (cnt == N - 2) break;
+			int[] cur = graph.get(i);
+			
+			if (find(cur[0]) != find(cur[1])) {
+				union(cur[0], cur[1]);
+				cost += cur[2];
+				cnt++;
 			}
 		}
-		bw.write(String.valueOf(weightSum - maxWeight));
-		bw.flush();
+		
+		System.out.println(cost);
+		
 		br.close();
-		bw.close();
 	}
 }
