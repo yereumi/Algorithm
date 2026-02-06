@@ -3,56 +3,56 @@ import java.util.*;
 
 public class Main {
 	
-	static int[] parent;
-
-	static int find(int x) {
-	    if (parent[x] == x) return x;
-	    return parent[x] = find(parent[x]);
-	}
-
-	static boolean union(int x, int y) {
-	    int parentX = find(x);
-	    int parentY = find(y);
-
-	    if (parentX == parentY) return false;
-
-	    parent[parentY] = parentX;
-	    return true;
-	}
+	static int N;
+	static List<List<int[]>> planets;
 	
-    public static void main(String[] args) throws Exception {
-    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    	int N = Integer.parseInt(br.readLine());
-    	PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[2] - o2[2]);
-    	for (int i = 0; i < N; i++) {
-    		StringTokenizer st = new StringTokenizer(br.readLine());
-    		for (int j = 0; j < N; j++) {
-    			int c = Integer.parseInt(st.nextToken());
-    			if (i < j) {
-    				pq.offer(new int[] { i, j, c });
-    			}
-    		}
-    	}
-    	
-    	parent = new int[N];
-    	for (int i = 0; i < N; i++) {
-    		parent[i] = i;
-    	}
-    	
-    	long cost = 0;
-    	while (!pq.isEmpty()) {
-    		int[] cur = pq.poll();
-    		
-    		int v1 = cur[0];
-    		int v2 = cur[1];
-    		int c = cur[2];
-    		
-    		if (find(v1) == find(v2)) continue;
-    		
-    		union(v1, v2);
-    		cost += c;
-    	}
-    	
-    	System.out.println(cost);
-    }
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		planets = new ArrayList<>();
+		for (int i = 0; i <= N; i++) {
+			planets.add(new ArrayList<>());
+		}
+		
+		for (int i = 1; i <= N; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int j = 1; j <= N; j++) {
+				int c = Integer.parseInt(st.nextToken());
+				planets.get(i).add(new int[] { j, c });
+				planets.get(j).add(new int[] { i, c });
+			}
+		}
+		
+		PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
+		pq.offer(new int[] { 1, 0 });
+		boolean[] visited = new boolean[N + 1];
+
+		long totalCost = 0;
+		int cnt = 0;
+		
+		while (!pq.isEmpty()) {
+			int[] cur = pq.poll();
+			int v = cur[0];
+			int cost = cur[1];
+			
+			if (visited[v]) continue;
+			
+			visited[v] = true;
+			totalCost += cost;
+			cnt++;
+			
+			if (cnt == N) break;
+			
+			for (int[] next : planets.get(v)) {
+				int nextV = next[0];
+				int nextCost = next[1];
+				
+				if (!visited[nextV]) pq.offer(new int[] { nextV, nextCost });
+			}
+		}
+		
+		System.out.println(totalCost);
+		
+		br.close();
+	}
 }
