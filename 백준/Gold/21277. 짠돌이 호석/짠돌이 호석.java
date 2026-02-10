@@ -78,15 +78,16 @@ public class Main {
         
         // 퍼즐 하나만 시계방향으로 90도씩 회전
         for (int i = 0; i < 4; i++) {
-        	puzzle1 = rotate(puzzle1.length, puzzle1[0].length, puzzle1);
-        	
+        	// 퍼즐2가 퍼즐1 기준으로 얼마나 이동했는지
         	for (int j = -puzzle2.length; j < puzzle1.length; j++) {
-        		for (int k = -puzzle2[0].length; k < puzzle2[0].length; k++) {
+        		for (int k = -puzzle2[0].length; k < puzzle1[0].length; k++) {
         			if (isValid(j, k, puzzle1, puzzle2)) {
         				answer = Math.min(answer, area(j, k, puzzle1, puzzle2));
         			}
         		}
         	}
+        	
+        	puzzle1 = rotate(puzzle1.length, puzzle1[0].length, puzzle1);
         }
         
         System.out.println(answer);
