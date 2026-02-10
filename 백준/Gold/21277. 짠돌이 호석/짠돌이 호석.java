@@ -80,8 +80,8 @@ public class Main {
         for (int i = 0; i < 4; i++) {
         	puzzle1 = rotate(puzzle1.length, puzzle1[0].length, puzzle1);
         	
-        	for (int j = -puzzle1.length; j < puzzle2.length; j++) {
-        		for (int k = -puzzle1[0].length; k < puzzle2[0].length; k++) {
+        	for (int j = -puzzle2.length; j < puzzle1.length; j++) {
+        		for (int k = -puzzle2[0].length; k < puzzle2[0].length; k++) {
         			if (isValid(j, k, puzzle1, puzzle2)) {
         				answer = Math.min(answer, area(j, k, puzzle1, puzzle2));
         			}
