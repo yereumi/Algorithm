@@ -71,6 +71,7 @@ public class Main {
 		while (!dq.isEmpty()) {
 			int[] cur = dq.poll();
 			
+			if (cur[3] >= answer) continue;
 			if (cur[0] == 4 && cur[1] == 4 && cur[2] == 4) {
 				return cur[3];
 			}
