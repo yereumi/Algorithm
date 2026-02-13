@@ -1,46 +1,54 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-    
-	static StringBuilder sb;
 
-	static int read() throws Exception {
-		int c, n = System.in.read() & 15;
-		while ((c = System.in.read()) >= 48)
-			n = (n << 3) + (n << 1) + (c & 15);
-		return n;
-	}
-
+	static final int INF = Integer.MAX_VALUE;
+	static int N, M;
+	static int[][] dist;
+	
 	public static void main(String[] args) throws Exception {
-		sb = new StringBuilder();
-		int n = read();
-		int m = read();
-		long[][] board = new long[n + 1][n + 1];
-		for (int i = 1; i <= n; i++) {
-			Arrays.fill(board[i], Integer.MAX_VALUE);
-			board[i][i] = 0L;
-		}
-		for (int i = 0; i < m; i++) {
-			int a = read();
-			int b = read();
-			int c = read();
-			board[a][b] = Math.min(board[a][b], c);
-		}
-		for (int k = 1; k <= n; k++) {
-			for (int i = 1; i <= n; i++) {
-				for (int j = 1; j <= n; j++) {
-					board[i][j] = Math.min(board[i][j], board[i][k] + board[k][j]);
-				}
+		StringBuilder sb = new StringBuilder();
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		M = Integer.parseInt(br.readLine());
+		
+		dist = new int[N + 1][N + 1];
+		for (int i = 1; i <= N; i++) {
+			for (int j = 1; j <= N; j++) {
+				if (i == j) dist[i][j] = 0;
+				else dist[i][j] = INF;
 			}
 		}
-		for (int i = 1; i <= n; i++) {
-			for (int j = 1; j <= n; j++) {
-				if (board[i][j] > 100_000_000) sb.append(0).append(" ");
-				else sb.append(board[i][j]).append(" ");
+		
+		StringTokenizer st;
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			int c = Integer.parseInt(st.nextToken());
+			dist[a][b] = Math.min(dist[a][b], c);
+		}
+		
+		for (int k = 1; k <= N; k++) {
+		    for (int i = 1; i <= N; i++) {
+		        for (int j = 1; j <= N; j++) {
+		            if (dist[i][k] != INF && dist[k][j] != INF) {
+		                dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+		            }
+		        }
+		    }
+		}
+		
+		for (int i = 1; i <= N; i++) {
+			for (int j =1; j <= N; j++) {
+				sb.append(dist[i][j] == INF ? 0 : dist[i][j]).append(" ");
 			}
 			sb.append("\n");
 		}
-		System.out.println(sb);
+		
+		System.out.println(sb.toString());
+		
+		br.close();
 	}
 }
