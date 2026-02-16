@@ -2,176 +2,118 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	
+
 	static int N, M, answer;
 	static int[][] board;
-	static int[][] delta = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+	static List<int[]> cctv = new ArrayList<>();
+	static int[][] delta = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
 
 	static boolean isValid(int r, int c) {
 		return r >= 0 && r < N && c >= 0 && c < M;
 	}
-	
-	static void simulation(int idx, char[][] newBoard) {
-		if (idx >= N * M) {
-			answer = Math.min(answer, countZero(newBoard));
-			return;
+
+	static void simulation(int idx, char[][] state) {
+        if (idx >= cctv.size()) {
+            answer = Math.min(answer, countZero(state));
+            return;
+        }
+
+        int r = cctv.get(idx)[0];
+        int c = cctv.get(idx)[1];
+        int type = board[r][c];
+
+        if (type == 1) {
+            for (int d = 0; d < 4; d++) {
+                List<int[]> changed = watch(r, c, state, new int[]{d});
+                simulation(idx + 1, state);
+                rollback(state, changed);
+            }
+        } else if (type == 2) {
+            for (int d = 0; d < 2; d++) {
+                List<int[]> changed = watch(r, c, state, new int[]{d, (d+2)%4});
+                simulation(idx + 1, state);
+                rollback(state, changed);
+            }
+        } else if (type == 3) {
+            for (int d = 0; d < 4; d++) {
+                List<int[]> changed = watch(r, c, state, new int[]{d, (d+1)%4});
+                simulation(idx + 1, state);
+                rollback(state, changed);
+            }
+        } else if (type == 4) {
+            for (int d = 0; d < 4; d++) {
+                List<int[]> changed = watch(r, c, state, new int[]{d, (d+1)%4, (d+2)%4});
+                simulation(idx + 1, state);
+                rollback(state, changed);
+            }
+        } else if (type == 5) {
+            List<int[]> changed = watch(r, c, state, new int[]{0,1,2,3});
+            simulation(idx + 1, state);
+            rollback(state, changed);
+        }
+    }
+
+	static List<int[]> watch(int r, int c, char[][] state, int[] dirs) {
+		List<int[]> changed = new ArrayList<>();
+
+		for (int d : dirs) {
+			int nr = r + delta[d][0];
+			int nc = c + delta[d][1];
+
+			while (isValid(nr, nc) && state[nr][nc] != '6') {
+				if (state[nr][nc] == '0') {
+					state[nr][nc] = '#';
+					changed.add(new int[] { nr, nc });
+				}
+
+				nr += delta[d][0];
+				nc += delta[d][1];
+			}
 		}
-		
-		int r = idx / M;
-		int c = idx % M;
-		int num = board[r][c];
-		
-		if (num == 0 || num == 6) simulation(idx + 1, newBoard);
-		
-		if (num == 1) {
-			for (int i = 0; i < 4; i++) {
-				
-				simulation(idx + 1, moveOne(r, c, copyBoard(newBoard), i));
-			}
-		} else if (num == 2) {
-			for (int i = 0; i < 2; i++) {
-				simulation(idx + 1, moveTwo(r, c, copyBoard(newBoard), i));
-			}
-		} else if (num == 3) {
-			for (int i = 0; i < 4; i++) {
-				simulation(idx + 1, moveThree(r, c, copyBoard(newBoard), i));
-			}
-		} else if (num == 4) {
-			for (int i = 0; i < 4; i++) {
-				simulation(idx + 1, moveFour(r, c, copyBoard(newBoard), i));
-			}
-		} else if (num == 5) {
-			simulation(idx + 1, moveFive(r, c, copyBoard(newBoard)));
+		return changed;
+	}
+
+	static void rollback(char[][] state, List<int[]> changed) {
+		for (int[] pos : changed) {
+			state[pos[0]][pos[1]] = '0';
 		}
 	}
-	
-	static char[][] copyBoard(char[][] board) {
-		char[][] newBoard = new char[N][M];
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				newBoard[i][j] = board[i][j];
-			}
-		}
-		return newBoard;
-	}
-	
-	static char[][] moveOne(int r, int c, char[][] newBoard, int d) {
-		int[] dt = delta[d];
-		int nr = r + dt[0], nc = c + dt[1];
-		
-		while (isValid(nr, nc) && board[nr][nc] != 6) {
-			newBoard[nr][nc] = '#';
-			nr += dt[0];
-			nc += dt[1];
-		}
-		
-		return newBoard;
-	}
-	
-	static char[][] moveTwo(int r, int c, char[][] newBoard, int d) {
-		int[] dt = delta[d];
-		int nr = r + dt[0], nc = c + dt[1];
-		
-		while (isValid(nr, nc) && board[nr][nc] != 6) {
-			newBoard[nr][nc] = '#';
-			nr += dt[0];
-			nc += dt[1];
-		}
-		
-		dt = delta[(d + 2) % 4];
-		nr = r + dt[0];
-		nc = c + dt[1];
-		
-		while (isValid(nr, nc) && board[nr][nc] != 6) {
-			newBoard[nr][nc] = '#';
-			nr += dt[0];
-			nc += dt[1];
-		}
-		
-		return newBoard;
-	}
-	
-	static char[][] moveThree(int r, int c, char[][] newBoard, int d) {
-		for (int i = 0; i < 2; i++) {
-			int[] dt = delta[(d + i) % 4];
-			int nr = r + dt[0], nc = c + dt[1];
-			
-			while (isValid(nr, nc) && board[nr][nc] != 6) {
-				newBoard[nr][nc] = '#';
-				nr += dt[0];
-				nc += dt[1];
-			}
-		}
-		
-		return newBoard;
-	}
-	
-	static char[][] moveFour(int r, int c, char[][] newBoard, int d) {
-		for (int i = 0; i < 3; i++) {
-			int[] dt = delta[(d + i) % 4];
-			int nr = r + dt[0], nc = c + dt[1];
-			
-			while (isValid(nr, nc) && board[nr][nc] != 6) {
-				newBoard[nr][nc] = '#';
-				nr += dt[0];
-				nc += dt[1];
-			}
-		}
-		
-		return newBoard;
-	}
-	
-	static char[][] moveFive(int r, int c, char[][] newBoard) {
-		for (int i = 0; i < 4; i++) {
-			int[] dt = delta[i];
-			int nr = r + dt[0], nc = c + dt[1];
-			
-			while (isValid(nr, nc) && board[nr][nc] != 6) {
-				newBoard[nr][nc] = '#';
-				nr += dt[0];
-				nc += dt[1];
-			}
-		}
-		
-		return newBoard;
-	}
-	
-	
-	static int countZero(char[][] newBoard) {
+
+	static int countZero(char[][] state) {
 		int cnt = 0;
-		
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
-				if (newBoard[i][j] == '0') cnt++;
+				if (state[i][j] == '0')
+					cnt++;
 			}
 		}
 		return cnt;
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
+
 		board = new int[N][M];
+		char[][] state = new char[N][M];
+		
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < M; j++) {
 				board[i][j] = Integer.parseInt(st.nextToken());
+				state[i][j] = (char) (board[i][j] + '0');
+
+				if (board[i][j] >= 1 && board[i][j] <= 5) {
+					cctv.add(new int[] { i, j });
+				}
 			}
 		}
-		
+
 		answer = Integer.MAX_VALUE;
-		char[][] newBoard = new char[N][M];
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				newBoard[i][j] = (char) (board[i][j] + '0');
-			}
-		}
-		
-		simulation(0, newBoard);
-		
+		simulation(0, state);
+
 		System.out.println(answer);
-		br.close();
 	}
 }
