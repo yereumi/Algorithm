@@ -45,9 +45,8 @@ public class Main {
 		if (nc < 1) nc += N;
 		
 		int key = (nr - 1) * N + nc - 1;
-		List<Fireball> value = result.getOrDefault(key, new ArrayList<>());
-		value.add(new Fireball(nr, nc, m, s, d));
-		result.put(key, value);
+		result.computeIfAbsent(key, k -> new ArrayList<>())
+	      .add(new Fireball(nr, nc, m, s, d));
 	}
 	
 	static void merge() {
