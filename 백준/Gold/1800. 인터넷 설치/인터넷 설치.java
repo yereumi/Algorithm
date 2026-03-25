@@ -24,8 +24,7 @@ public class Main {
 	            if (dist[nextNode] > dist[cur] + cost) {
 	                dist[nextNode] = dist[cur] + cost;
 
-	                if (cost == 0) dq.offerFirst(nextNode);
-	                else dq.offerLast(nextNode);
+	                dq.offer(nextNode);
 	            }
 	        }
 	    }
