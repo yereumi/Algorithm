@@ -7,3 +7,11 @@
 ### 💛 Gold 3 - 2024.12.24
 ### 💛 Gold 4 - 2024.12.02
 ### 💛 Gold 5 - 2023.06.07
+
+<!---LeetCode Topics Start-->
+# LeetCode Topics
+## Database
+|  |
+| ------- |
+| [0175-combine-two-tables](https://github.com/yereumi/Algorithm/tree/master/0175-combine-two-tables) |
+<!---LeetCode Topics End-->
