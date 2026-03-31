@@ -3,30 +3,29 @@ import java.util.*;
 
 public class Main {
 	
+	static final int INF = 1_000_000_000;
 	static int N, M, K;
 	static List<List<int[]>> graph;
 	static List<Integer> friends;
 	
-	static int dijkstra() {
+	static int floyd() {
 		int[][] dist = new int[N + 1][N + 1];
 		for (int i = 0; i <= N; i++) {
-			Arrays.fill(dist[i], Integer.MAX_VALUE);
+			Arrays.fill(dist[i], INF);
+			dist[i][i] = 0;
 		}
 		
 		for (int i = 1; i <= N; i++) {
-			PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> o1 - o2);
-			pq.offer(i);
-			dist[i][i] = 0;
-			
-			while (!pq.isEmpty()) {
-				int cur = pq.poll();
-				
-				for (int[] next : graph.get(cur)) {
-					int nextNode = next[0], nextDist = next[1];
-					
-					if (dist[i][cur] + nextDist < dist[i][nextNode]) {
-						dist[i][nextNode] = dist[i][cur] + nextDist;
-						pq.offer(nextNode);
+			for (int[] next : graph.get(i)) {
+				dist[i][next[0]] = next[1];
+			}
+		}
+		
+		for (int i = 1; i <= N; i++) {
+			for (int j = 1; j <= N; j++) {
+				for (int k = 1; k <= N; k++) {
+					if (dist[j][i] + dist[i][k] < dist[j][k]) {
+						dist[j][k] = dist[j][i] + dist[i][k];
 					}
 				}
 			}
@@ -79,7 +78,7 @@ public class Main {
 				friends.add(Integer.parseInt(st.nextToken()));
 			}
 			
-			sb.append(dijkstra()).append("\n");
+			sb.append(floyd()).append("\n");
 		}
 		
 		System.out.println(sb.toString());
