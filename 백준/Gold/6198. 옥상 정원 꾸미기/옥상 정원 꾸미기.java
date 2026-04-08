@@ -4,7 +4,6 @@ import java.util.*;
 public class Main {
 	
 	public static void main(String[] args) throws Exception {
-		StringBuilder sb = new StringBuilder();
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 		Deque<Integer> dq = new ArrayDeque<>();
