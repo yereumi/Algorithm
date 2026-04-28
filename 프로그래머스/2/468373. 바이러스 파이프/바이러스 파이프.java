@@ -1,6 +1,7 @@
 /**
 1. 타입 별로 간선 따로 저장
 2. 백트래킹으로 depth k번
+3. 각 감염됐을 때 bfs로 같은 파이프라인 전파
 **/
 
 import java.util.*;
@@ -21,7 +22,6 @@ class Solution {
             return;
         }
         
-        boolean[] visited;
         boolean[] newInfected = new boolean[N + 1];
         for (int i = 0; i <= N; i++) {
             newInfected[i] = infected[i];
@@ -75,8 +75,6 @@ class Solution {
     }
     
     public static void bfs(int node, int type, boolean[] infected) {
-        // boolean[] visited = new boolean[N + 1];
-        // visited[node] = true;
         infected[node] = true;
         Deque<Integer> dq = new ArrayDeque<>();
         dq.offer(node);
@@ -93,8 +91,6 @@ class Solution {
                 }
             }
         }
-        
-        // return visited;
     }
     
     public static int solution(int n, int infection, int[][] edges, int k) {
