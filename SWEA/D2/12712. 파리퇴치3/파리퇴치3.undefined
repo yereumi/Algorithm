@@ -1,0 +1,74 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+	
+	public static int N, M;
+	public static int[][] board;
+	
+	public static int[] dr = new int[] { -1, 1, 0, 0, -1, 1, -1, 1 };
+	public static int[] dc = new int[] { 0, 0, -1, 1, -1, 1, 1, -1 };
+	
+	public static boolean isValid(int r, int c) {
+		return r >= 0 && r < N && c >= 0 && c < N;
+	}
+	
+	public static int spray(int r, int c) {
+		int sum1 = board[r][c], sum2 = board[r][c];
+		
+		for (int i = 0; i < 4; i++) {
+			for (int j = 1; j < M; j++) {
+				int nr = r + dr[i] * j;
+				int nc = c + dc[i] * j;
+				if (!isValid(nr, nc)) continue;
+				
+				sum1 += board[nr][nc];
+			}
+		}
+		
+		for (int i = 4; i < 8; i++) {
+			for (int j = 1; j < M; j++) {
+				int nr = r + dr[i] * j;
+				int nc = c + dc[i] * j;
+				if (!isValid(nr, nc)) continue;
+				
+				sum2 += board[nr][nc];
+			}
+		}
+		
+		return Math.max(sum1, sum2);
+	}
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		
+		int T = Integer.parseInt(br.readLine());
+		StringTokenizer st;
+		
+		for (int t = 1; t <= T; t++) {
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+			
+			board = new int[N][N];
+			for (int i = 0; i < N; i++) {
+				st = new StringTokenizer(br.readLine());
+				for (int j = 0; j < N; j++) {
+					board[i][j] = Integer.parseInt(st.nextToken());
+				}
+			}
+			
+			int max = 0;
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
+					max = Math.max(max, spray(i, j));
+				}
+			}
+			
+			sb.append("#" + t + " " + max).append("\n");
+		}
+		
+		System.out.println(sb);
+	}
+}
