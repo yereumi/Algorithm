@@ -1,0 +1,71 @@
+import java.util.*;
+import java.io.*;
+
+class Solution {
+    public static int N, sr, sc, er, ec;
+    public static int[][] board;
+    
+    public static int[] dr = new int[] { -1, 1, 0, 0 };
+    public static int[] dc = new int[] { 0, 0, -1, 1 };
+    
+    public static boolean isValid(int r, int c) {
+     	return r >= 0 && r < N && c >= 0 && c < N;   
+    }
+    
+    public static int move() {
+        Deque<int[]> dq = new ArrayDeque<>();
+        dq.offer(new int[] { sr, sc, 0 });
+        boolean[][] visited = new boolean[N][N];
+        visited[sr][sc] = true;
+        
+        while (!dq.isEmpty()) {
+         	int[] cur = dq.poll();
+            
+            for (int i = 0; i < 4; i++) {
+             	int nr = cur[0] + dr[i];
+                int nc = cur[1] + dc[i];
+                int nd = cur[2] + 1;
+                if (!isValid(nr, nc) || visited[nr][nc] || board[nr][nc] == 1) continue;
+                if (nr == er && nc == ec) return nd;
+                if (board[nr][nc] == 2 && nd % 3 != 0) {
+                    dq.offer(new int[] { cur[0], cur[1], nd });
+                } else {
+                    dq.offer(new int[] { nr, nc, nd });
+                    visited[nr][nc] = true;
+                }
+            }
+        }
+        
+        return -1;
+    }
+    
+	public static void main(String args[]) throws Exception	{
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        
+		int T = Integer.parseInt(br.readLine());
+        for (int t = 1; t <= T; t++) {
+			N = Integer.parseInt(br.readLine());
+            board = new int[N][N];
+            for (int i = 0; i < N; i++) {
+             	st = new StringTokenizer(br.readLine());
+                for (int j = 0; j < N; j++) {
+                 	board[i][j] = Integer.parseInt(st.nextToken());
+                }
+            }
+            
+            st = new StringTokenizer(br.readLine());
+            sr = Integer.parseInt(st.nextToken());
+            sc = Integer.parseInt(st.nextToken());
+            
+            st = new StringTokenizer(br.readLine());
+            er = Integer.parseInt(st.nextToken());
+            ec = Integer.parseInt(st.nextToken());
+            
+            sb.append("#" + t + " " + move()).append("\n");
+        }
+        
+        System.out.println(sb.toString());
+	}
+}
