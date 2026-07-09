@@ -1,0 +1,45 @@
+import java.util.*;
+import java.io.*;
+
+class Solution {
+    
+    public static int N, B, answer;
+    public static int[] num;
+    
+    public static void top(int idx, int sum) {
+        if (idx > N) return;
+        int height = Math.abs(sum + num[idx] - B);
+        
+		if (sum + num[idx] >= B) answer = Math.min(answer, height);
+        top(idx + 1, sum + num[idx]);
+        top(idx + 1, sum);       
+    }
+    
+	public static void main(String args[]) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        
+        int T = Integer.parseInt(br.readLine());
+        for (int t = 1; t <= T; t++) {
+            st = new StringTokenizer(br.readLine());
+            N = Integer.parseInt(st.nextToken());
+            B = Integer.parseInt(st.nextToken());
+            
+            num = new int[N + 1];
+            st = new StringTokenizer(br.readLine());
+            for (int i = 1; i <= N; i++) {
+                num[i] = Integer.parseInt(st.nextToken());
+            }
+            
+            Arrays.sort(num);
+            
+            answer = Integer.MAX_VALUE;
+            top(0, 0);
+            
+            sb.append("#" + t + " " + answer).append("\n");
+        }
+        
+        System.out.println(sb.toString());
+	}
+}
