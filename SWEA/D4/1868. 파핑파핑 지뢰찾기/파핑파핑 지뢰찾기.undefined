@@ -1,0 +1,97 @@
+import java.util.*;
+import java.io.*;
+
+class Solution {
+    
+    public static int N;
+    public static char[][] board;
+    public static int[][] num;
+    
+    public static int[] dr = new int[] { -1, 1, 0, 0, -1, -1, 1, 1 };
+    public static int[] dc = new int[] { 0, 0, -1, 1, -1, 1, -1, 1 };
+    
+    public static boolean isValid(int r, int c) {
+        return r >= 0 && r < N && c >= 0 && c < N;
+    }
+    
+	public static void main(String args[]) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+        for (int t = 1; t <= T; t++) {
+            N = Integer.parseInt(br.readLine());
+            board = new char[N][N];
+            num = new int[N][N];
+            for (int i = 0; i < N; i++) {
+             	String str = br.readLine();
+                for (int j = 0; j < N; j++) {
+                 	board[i][j] = str.charAt(j);
+                    if (board[i][j] == '*') num[i][j] = -1;
+                }
+            }
+
+            Deque<int[]> dq = new ArrayDeque<>();
+            boolean[][] visited = new boolean[N][N];
+
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (num[i][j] == -1) continue;
+                    
+                    int cnt = 0;
+                    for (int k = 0; k < 8; k++) {
+                        int nr = i + dr[k];
+                        int nc = j + dc[k];
+                        if (!isValid(nr, nc)) continue;
+                        if (board[nr][nc] == '*') cnt++;
+                    }
+                    
+                    num[i][j] = cnt;
+                }
+            }
+            
+            int answer = 0;
+            
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (visited[i][j]) continue;
+             		else if (num[i][j] == 0) {
+                        answer++;
+                        dq.offer(new int[] { i, j });
+                        visited[i][j] = true;
+                        
+                        while (!dq.isEmpty()) {
+                         	int[] cur = dq.poll();
+                            
+                            for (int d = 0; d < 8; d++) {
+                             	int nr = cur[0] + dr[d];
+                                int nc = cur[1] + dc[d];
+                                
+                                if (!isValid(nr, nc) || visited[nr][nc] || num[nr][nc] == -1) continue;
+                                
+                                if (num[nr][nc] == 0) {
+                                    visited[nr][nc] = true;
+                                    dq.offer(new int[] { nr, nc });
+                                } else {
+                                 	visited[nr][nc] = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+             		if (!visited[i][j] && num[i][j] > 0) {
+                     	visited[i][j] = true;
+                        answer++;
+                    }       
+                }
+            }
+
+            sb.append("#" + t +" " + answer).append("\n");
+        }
+        
+        System.out.println(sb.toString());
+	}
+}
