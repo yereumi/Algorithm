@@ -192,8 +192,11 @@ public class Main {
             step3_4();
         }
 
+        StringBuilder sb = new StringBuilder();
         for (int t : time) {
-            System.out.println(t);
+            sb.append(t).append('\n');
         }
+
+        System.out.println(sb.toString());
     }
 }
