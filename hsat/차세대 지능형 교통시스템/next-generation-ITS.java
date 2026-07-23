@@ -10,6 +10,7 @@ public class Main {
     // 위, 아래, 왼, 오
     static int[] dr = { -1, 1, 0, 0 };
     static int[] dc = { 0, 0, -1, 1 };
+    static int[] opposite = { 1, 0, 3, 2 };
 
     static int[][] blinkers = { // (어디에서 왔는지) 방향, (어디로 갈지) 방향
             { 2, 0, 1, 3 }, { 1, 0, 2, 3 }, { 3, 0, 1, 2 }, { 0, 1, 2, 3 },
@@ -21,7 +22,7 @@ public class Main {
         return r >= 0 && r < N && c >= 0 && c < N;
     }
     
-    static void backtracking(int depth, int idx, int direction, int time) {
+    static void dfs(int depth, int idx, int direction, int time) {
         if (time == T) return;
 
         int r = idx / N, c = idx % N;
@@ -40,12 +41,9 @@ public class Main {
             if (!isValid(nr, nc)) continue;
 
             visited[nr * N + nc] = true;
-            int dir = 0; // 다음 백트래킹에 쓸 방향(어디에서 왔는지)
-            if (dr[d] == -1) dir = 1;
-            else if (dc[d] == -1) dir = 3;
-            else if (dc[d] == 1) dir = 2;
+            int dir = opposite[d]; // 다음 백트래킹에 쓸 방향(어디에서 왔는지)
             
-            backtracking(depth + 1, nr * N + nc, dir, time + 1);
+            dfs(depth + 1, nr * N + nc, dir, time + 1);
         }
     }
 
@@ -65,7 +63,7 @@ public class Main {
         }
 
         visited[0] = true;
-        backtracking(0, 0, 1, 0);
+        dfs(0, 0, 1, 0);
         
         int answer = 0;
         for (int i = 0; i < N * N; i++) {
