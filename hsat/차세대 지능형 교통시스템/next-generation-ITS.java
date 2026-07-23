@@ -25,13 +25,13 @@ public class Main {
         if (time == T) return;
 
         int r = idx / N, c = idx % N;
-        int[] curRoad = crossroads[idx];
-        int curTime = time % 4;
+        int[] curRoad = crossroads[idx]; // 현재 교차로
+        int curTime = time % 4; // 현재 시간
+        int curBlinker = curRoad[curTime]; // 현재 교차로의 신호집합
 
-        int curBlinker = curRoad[curTime];
-
-        if (blinkers[curBlinker][0] != direction) return;
+        if (blinkers[curBlinker][0] != direction) return; // 신호가 맞지 않으면 return
         
+        // 신호집합 순회
         for (int i = 1; i < blinkers[curBlinker].length; i++) {
             int d = blinkers[curBlinker][i];
             int nr = r + dr[d];
@@ -40,7 +40,7 @@ public class Main {
             if (!isValid(nr, nc)) continue;
 
             visited[nr * N + nc] = true;
-            int dir = 0;
+            int dir = 0; // 다음 백트래킹에 쓸 방향(어디에서 왔는지)
             if (dr[d] == -1) dir = 1;
             else if (dc[d] == -1) dir = 3;
             else if (dc[d] == 1) dir = 2;
